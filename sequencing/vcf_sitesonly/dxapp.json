@@ -1,7 +1,7 @@
 {
   "name": "vcf_sitesonly",
   "title": "Get Sites-only VCF",
-  "summary": "Get a sites-only vcf (1st 8 columns) using cut",
+  "summary": "Get a sites-only VCF (1st 8 columns) using cut",
   "dxapi": "1.0.0",
   "version": "1.0.0",
   "categories": [
@@ -12,7 +12,7 @@
       "name": "variants_vcfgzs",
       "label": "VCF File",
       "class": "array:file",
-      "help": "One or more VCF files in gzipped format",
+      "help": "One or more VCF files in gzipped format.",
       "optional": false,
       "patterns": [
         "*.vcf.gz"
@@ -23,14 +23,14 @@
     {
       "name": "vcf_out",
       "label": "Filtered VCF file",
-      "help": "One or more filtered VCF files in gzipped format",
+      "help": "One or more filtered VCF files in gzipped format.",
       "class": "array:file",
       "optional" : false
     },
     {
       "name": "vcfidx_out",
       "label": "Filtered VCF Index file",
-      "help": "One or more filtered VCF index file(s) in gzipped format",      
+      "help": "One or more filtered VCF index file(s) in gzipped format.",      
       "class": "array:file",
       "optional" : false
     }
@@ -40,13 +40,17 @@
     "file": "src/vcf_sitesonly.sh",
     "distribution": "Ubuntu",
     "release": "14.04",
-    "timeoutPolicy": {"main": {"hours": 12}}
+    "timeoutPolicy": {"main": {"hours": 24}, "*": {"hours": 12}}
   },
     "regionalOptions": {
     "aws:us-east-1": {"systemRequirements": {"*": {"instanceType": "mem1_ssd1_x4"}},
                       "assetDepends": [{"id": "record-FGp4b3j0kPPKP1K94YfkPQgP"}]},
     "azure:westus": {"systemRequirements": {"*": {"instanceType": "azure:mem1_ssd1_x4"}},
                       "assetDepends": [{"id": "record-FGp4yvQ9JqB1ZjpQ26y15gB3"}]}
+  },
+    "details": {
+    "upstreamAuthor": "Ritchie, MD",
+    "whatsNew": "* 1.0.0: Updated to 14.04, cleaned up code, updated to assetDepends"
   },
   "openSource" : true
 }
