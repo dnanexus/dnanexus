@@ -10,7 +10,7 @@
       "name": "variants_vcfgzs",
       "label": "VCF File",
       "class": "array:file",
-      "help": "Input VCF file in GZ format",
+      "help": "Input VCF file in GZ format.",
       "optional": false,
       "patterns": ["*.vcf.gz"]
     },
@@ -18,22 +18,22 @@
       "name": "variants_vcfgztbis",
       "label": "VCF Index File",
       "class": "array:file",
-      "help": "Input VCF index file in GZ format",
+      "help": "Input VCF index file in GZ format.",
       "optional": false,
       "patterns": ["*.tbi"]
     },
     {
       "name": "query_str",
       "label": "Query String to bcftools query",
-      "help": "fields to query from the VCF file in tab delimited format",
+      "help": "Fields to query from the VCF file in tab delimited format.",
       "class": "string",
       "optional": false,
 	  "default" : "%CHROM\\t%POS\\t%ID\\t%REF\\t%ALT\\t%QUAL\\t%INFO/QD\\t%INFO/AN\\t%INFO/AC[\\t%GT]\\n"
     },
     {
       "name" : "cat_results",
-      "label" : "Concatenate Results",
-      "help" : "Option to concatenate results?",
+      "label" : "Concatenate Results?",
+      "help" : "Option to concatenate results.",
       "class" : "boolean",
       "optional" : false,
       "default" : false,
@@ -42,7 +42,7 @@
     {
       "name" : "prefix",
       "label" : "Prefix for concatenated result",
-      "help" : "Prefix for the concatenated results file",
+      "help" : "(Optional) Prefix for the concatenated results file.",
       "class" : "string",
       "optional" : true,
       "default" : "combined",
@@ -53,6 +53,7 @@
     {
       "name": "query_gz",
       "label": "Output of vcf-query (block compressed)",
+      "help" : "Outputs the annotation file in GZ format.",
       "class": "array:file"
     }
   ],
