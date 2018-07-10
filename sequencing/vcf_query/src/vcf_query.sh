@@ -42,18 +42,18 @@ main() {
 		VCFIDX_DXFN=$(echo "$VCF_LINE" | cut -f3)		
 	
 		SUBJOB=$(dx-jobutil-new-job run_query -ivariants_vcfgzs:file="$VCF_DXFN" -ivariants_vcfgztbis:file="$VCFIDX_DXFN" -iquery_str:string=$query_str)
-		CAT_ARGS="$CAT_ARGS -iquery_in:array:file=$SUBJOB:query_out"
+		CAT_ARGS="$CAT_ARGS -iquery_in:array:file=$SUBJOB:query_gz"
 		
 		if test "$cat_results" = "false"; then
 			# for each subjob, add the output to our array
-    		dx-jobutil-add-output query_out --array "$SUBJOB:query_out" --class=jobref
+    		dx-jobutil-add-output query_gz --array "$SUBJOB:query_gz" --class=jobref
     	fi
 		
 	done < $JOINT_LIST
 	
 	if test "$cat_results" = "true"; then
 		CATJOB=$(dx-jobutil-new-job cat_results $CAT_ARGS -iprefix:string=$prefix)
-		dx-jobutil-add-output query_out --array "$CATJOB:query_out" --class=jobref
+		dx-jobutil-add-output query_gz --array "$CATJOB:query_gz" --class=jobref
 	fi
 	
 }
@@ -72,10 +72,9 @@ run_query() {
 
 	# TODO: parallelize smartly using -r chr:from-to and output accordingly
 	bcftools query input.vcf.gz -f "$query_str"  -H | sed -e'1 s/\[[0-9]*\]//g' -e '1 s/  *//g' |  bgzip -c > $OUT_DIR/$PREFIX.query.gz
+	query_gz=$(dx upload "$OUT_DIR/$PREFIX.query.gz" --brief)
 
-	query_out=$(dx upload "$OUT_DIR/$PREFIX.query.gz" --brief)
-
-    dx-jobutil-add-output query_out "$query_out" --class=file
+    dx-jobutil-add-output query_gz "$query_gz" --class=file
 }
 
 cat_results() {
@@ -97,7 +96,7 @@ cat_results() {
 	dx download "$DX_RESOURCES_ID:/GATK/resources/human_g1k_v37_decoy.dict" -o ref.dict
 	
 	cat_vcf.py -D ref.dict $CAT_ARGS -o $OUTDIR/$prefix.query.gz
-	query_out=$(dx upload $OUTDIR/$prefix.query.gz --brief)
-	dx-jobutil-add-output query_out $query_out
+	query_gz=$(dx upload $OUTDIR/$prefix.query.gz --brief)
+	dx-jobutil-add-output query_gz $query_gz
 }
 	
