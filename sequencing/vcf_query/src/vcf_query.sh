@@ -3,6 +3,13 @@
 
 set -e -x -o pipefail
 
+if [[ "$DX_RESOURCES_ID" != "" ]]; then
+  DX_ASSETS_ID="$DX_RESOURCES_ID"
+else
+  DX_ASSETS_ID="$DX_PROJECT_CONTEXT_ID"
+fi
+
+
 main() {
 
 	echo "Value of query_str: '$query_str'"
@@ -93,7 +100,7 @@ cat_results() {
 	
 	OUTDIR=$(mktemp -d)
 	
-	dx download "$DX_RESOURCES_ID:/GATK/resources/human_g1k_v37_decoy.dict" -o ref.dict
+	dx download "$DX_ASSETS_ID:/GATK/resources/human_g1k_v37_decoy.dict" -o ref.dict
 	
 	cat_vcf.py -D ref.dict $CAT_ARGS -o $OUTDIR/$prefix.query.gz
 	query_gz=$(dx upload $OUTDIR/$prefix.query.gz --brief)
