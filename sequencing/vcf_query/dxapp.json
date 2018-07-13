@@ -18,14 +18,14 @@
       "name": "variants_vcfgztbis",
       "label": "VCF Index File",
       "class": "array:file",
-      "help": "Input VCF index file in GZ format.",
+      "help": "Input VCF index file in TBI format.",
       "optional": false,
-      "patterns": ["*.tbi"]
+      "patterns": ["*.vcf.gz.tbi"]
     },
     {
       "name": "query_str",
       "label": "Query String to bcftools query",
-      "help": "Fields to query from the VCF file in tab delimited format.",
+      "help": "Fields to query from the VCF file in tab-delimited format.",
       "class": "string",
       "optional": false,
 	  "default" : "%CHROM\\t%POS\\t%ID\\t%REF\\t%ALT\\t%QUAL\\t%INFO/QD\\t%INFO/AN\\t%INFO/AC[\\t%GT]\\n"
@@ -52,7 +52,7 @@
   "outputSpec": [
     {
       "name": "query_gz",
-      "label": "Output of vcf-query (block compressed)",
+      "label": "Output of vcf-query (block-compressed)",
       "help" : "Outputs the annotation file in GZ format.",
       "class": "array:file"
     }
