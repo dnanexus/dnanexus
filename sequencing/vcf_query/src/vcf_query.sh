@@ -3,18 +3,13 @@
 
 set -e -x -o pipefail
 
-if [[ "$DX_RESOURCES_ID" != "" ]]; then
-  DX_ASSETS_ID="$DX_RESOURCES_ID"
-else
-  DX_ASSETS_ID="$DX_PROJECT_CONTEXT_ID"
-fi
-
 
 main() {
 
 	echo "Value of query_str: '$query_str'"
     echo "Value of variants_vcfgzs: '$variants_vcfgzs'"
     echo "Value of variants_vcfgztbis: '$variants_vcfgztbis'"
+    echo "value of DX_ASSETS_ID: $DX_ASSETS_ID"
 
 	# Sanity check - make sure vcf + vcfidx have same # of elements
 	if test "${#variants_vcfgztbis[@]}" -ne "${#variants_vcfgzs[@]}"; then
@@ -49,18 +44,18 @@ main() {
 		VCFIDX_DXFN=$(echo "$VCF_LINE" | cut -f3)		
 	
 		SUBJOB=$(dx-jobutil-new-job run_query -ivariants_vcfgzs:file="$VCF_DXFN" -ivariants_vcfgztbis:file="$VCFIDX_DXFN" -iquery_str:string=$query_str)
-		CAT_ARGS="$CAT_ARGS -iquery_in:array:file=$SUBJOB:query_gz"
+		CAT_ARGS="$CAT_ARGS -iquery_in:array:file=$SUBJOB:query_gzs"
 		
 		if test "$cat_results" = "false"; then
 			# for each subjob, add the output to our array
-    		dx-jobutil-add-output query_gz --array "$SUBJOB:query_gz" --class=jobref
+    		dx-jobutil-add-output query_gzs --array "$SUBJOB:query_gzs" --class=jobref
     	fi
 		
 	done < $JOINT_LIST
 	
 	if test "$cat_results" = "true"; then
 		CATJOB=$(dx-jobutil-new-job cat_results $CAT_ARGS -iprefix:string=$prefix)
-		dx-jobutil-add-output query_gz --array "$CATJOB:query_gz" --class=jobref
+		dx-jobutil-add-output query_gzs --array "$CATJOB:query_gzs" --class=jobref
 	fi
 	
 }
@@ -79,16 +74,16 @@ run_query() {
 
 	# TODO: parallelize smartly using -r chr:from-to and output accordingly
 	bcftools query input.vcf.gz -f "$query_str"  -H | sed -e'1 s/\[[0-9]*\]//g' -e '1 s/  *//g' |  bgzip -c > $OUT_DIR/$PREFIX.query.gz
-	query_gz=$(dx upload "$OUT_DIR/$PREFIX.query.gz" --brief)
+	query_gzs=$(dx upload "$OUT_DIR/$PREFIX.query.gz" --brief)
 
-    dx-jobutil-add-output query_gz "$query_gz" --class=file
+    dx-jobutil-add-output query_gzs "$query_gzs" --class=file
 }
 
 cat_results() {
 
 	echo "Value of query_in: '$query_in'"
 	echo "Value of prefix: '$prefix'"
-	
+
 	CAT_ARGS=""
 	for i in "${!query_in[@]}"; do
 		CAT_ARGS="$CAT_ARGS -V $(dx describe --json "${query_in[$i]}" | jq -r .id)"
@@ -100,10 +95,8 @@ cat_results() {
 	
 	OUTDIR=$(mktemp -d)
 	
-	dx download "$DX_ASSETS_ID:/GATK/resources/human_g1k_v37_decoy.dict" -o ref.dict
-	
-	cat_vcf.py -D ref.dict $CAT_ARGS -o $OUTDIR/$prefix.query.gz
-	query_gz=$(dx upload $OUTDIR/$prefix.query.gz --brief)
-	dx-jobutil-add-output query_gz $query_gz
+	cat_vcf.py -D /usr/bin/human_g1k_v37_decoy.dict $CAT_ARGS -o $OUTDIR/$prefix.query.gz
+	query_gzs=$(dx upload $OUTDIR/$prefix.query.gz --brief)
+	dx-jobutil-add-output query_gzs $query_gzs
 }
 	

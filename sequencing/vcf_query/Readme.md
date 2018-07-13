@@ -10,6 +10,6 @@ This app requires VCF file(s) (`*.vcf.gz`) along with its respective index file(
 
 Additonally, the app has an option to concatenate the results into a single file. 
 
-## What does this applet output?
+## What does this app output?
 
 The applet outputs the VCF file annotations as a (`*.query.gz`) file.

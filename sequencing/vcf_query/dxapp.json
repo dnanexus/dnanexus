@@ -51,7 +51,7 @@
   ],
   "outputSpec": [
     {
-      "name": "query_gz",
+      "name": "query_gzs",
       "label": "Output of vcf-query (block-compressed)",
       "help" : "Outputs the annotation file in GZ format.",
       "class": "array:file"
@@ -75,6 +75,6 @@
   },
   "openSource" : true,
   "details": {
-    "whatsNew": ""
+    "whatsNew": "* 1.0.0 First version of the Query VCF File app."
   }
 }
