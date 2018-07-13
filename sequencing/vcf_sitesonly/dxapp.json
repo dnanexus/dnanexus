@@ -23,7 +23,7 @@
     {
       "name": "vcf_out",
       "label": "Filtered VCF file",
-      "help": "One or more filtered VCF files in gzipped format.",
+      "help": "One or more filtered VCF file(s) in gzipped format.",
       "class": "array:file",
       "optional" : false
     },
@@ -49,8 +49,7 @@
                       "assetDepends": [{"id": "record-FGp4yvQ9JqB1ZjpQ26y15gB3"}]}
   },
     "details": {
-    "upstreamAuthor": "Ritchie, MD",
-    "whatsNew": "* 1.0.0: Updated to 14.04, cleaned up code, updated to assetDepends"
+    "whatsNew": ""
   },
   "openSource" : true
 }
