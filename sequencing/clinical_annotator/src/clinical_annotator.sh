@@ -102,19 +102,19 @@ function parallel_download_and_annotate() {
 
     fi
 
-	if [ ! -f $OUT_VCF.tbi ]; then
-		tabix -p vcf -f $OUT_VCF
-	fi
+    if [ ! -f $OUT_VCF.tbi ]; then
+        tabix -p vcf -f $OUT_VCF
+    fi
 
-	VCF_UP=$(dx upload --brief $OUT_VCF)
-	IDX_UP=$(dx upload --brief $OUT_VCF.tbi)
+    VCF_UP=$(dx upload --brief $OUT_VCF)
+    IDX_UP=$(dx upload --brief $OUT_VCF.tbi)
 
-	dx-jobutil-add-output out_variants_vcfgzs "$VCF_UP" --class=array:file
-	dx-jobutil-add-output out_variants_vcfgztbis "$IDX_UP" --class=array:file
+    dx-jobutil-add-output out_variants_vcfgzs "$VCF_UP" --class=array:file
+    dx-jobutil-add-output out_variants_vcfgztbis "$IDX_UP" --class=array:file
 
-	TO_RM=$(dx describe "$1" --name)
+    TO_RM=$(dx describe "$1" --name)
 
-	rm $OUT_VCF*
+    rm $OUT_VCF*
 
 }
 export -f parallel_download_and_annotate
