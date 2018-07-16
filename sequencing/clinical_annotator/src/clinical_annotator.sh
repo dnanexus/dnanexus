@@ -24,16 +24,20 @@ function reformat_resources() {
 	cd $HOME
 
 	python ClinVar_tsvTOvcf.py variant_summary.txt.gz
-    
-	vcf-sort -c variant_summary.b37.vcf | bgzip -c > variant_summary.b37.vcf.gz
-	vcf-sort -c variant_summary.b38.vcf | bgzip -c > variant_summary.b38.vcf.gz
-	tabix -p vcf -f variant_summary.b37.vcf.gz
-	tabix -p vcf -f variant_summary.b38.vcf.gz
+
+    if [ "$build_version" = "b37" ];
+    then 
+        vcf-sort -c variant_summary.b37.vcf | bgzip -c > variant_summary.b37.vcf.gz
+        tabix -p vcf -f variant_summary.b37.vcf.gz
+    else
+        vcf-sort -c variant_summary.b38.vcf | bgzip -c > variant_summary.b38.vcf.gz
+        tabix -p vcf -f variant_summary.b38.vcf.gz
+    fi    
 
 	if test "${hgmd_pro_file}"; then
 		
         dx download "${hgmd_pro_file}"
-        python reformatHGMD.py $(dx describe "$hgmd_pro_file" --name) | bgzip -c > $HOME/HGMD_PRO.reformated.vcf.gz
+        python reformatHGMD.py $(dx describe "$hgmd_pro_file" --name) | bgzip -c > HGMD_PRO.reformated.vcf.gz
         tabix -p vcf -f HGMD_PRO.reformated.vcf.gz
 	
     fi
