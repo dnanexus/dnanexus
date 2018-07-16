@@ -21,9 +21,9 @@ export -f parallel_download
 ############################################
 function reformat_resources() {
 
-	cd $HOME
+    cd $HOME
 
-	python ClinVar_tsvTOvcf.py variant_summary.txt.gz
+    python ClinVar_tsvTOvcf.py variant_summary.txt.gz
 
     if [ "$build_version" = "b37" ];
     then 
@@ -34,12 +34,12 @@ function reformat_resources() {
         tabix -p vcf -f variant_summary.b38.vcf.gz
     fi    
 
-	if test "${hgmd_pro_file}"; then
-		
+    if test "${hgmd_pro_file}"; then
+
         dx download "${hgmd_pro_file}"
         python reformatHGMD.py $(dx describe "$hgmd_pro_file" --name) | bgzip -c > HGMD_PRO.reformated.vcf.gz
         tabix -p vcf -f HGMD_PRO.reformated.vcf.gz
-	
+
     fi
 
 }
